@@ -11,7 +11,7 @@ public class Board : IBoard
     {
         this.Name = name;
         this.UUID = Guid.NewGuid().ToString();
-        this.Columns = new SortedList<IColumn, string>();
+        this.Columns = new List<IColumn>();
     }
 
     public void AddTask(ITask task)
@@ -26,7 +26,7 @@ public class Board : IBoard
             throw new ColumnDoesNotExistException("Error, there are no columns");
         }
 
-        this.Columns.Keys[0].AddTask(task);
+        this.Columns[0].AddTask(task);
     }
 
     public void AddColumn(IColumn column)
@@ -41,7 +41,7 @@ public class Board : IBoard
             throw new ColumnCountLimitException("Error, limit of columns is " + COLUMN_LIMIT);
         }
 
-        this.Columns.Add(column, column.UUID);
+        this.Columns.Add(column);
     }
 
     public void MoveTask(string taskUUID, string columnUUID)
@@ -56,9 +56,9 @@ public class Board : IBoard
             throw new TaskDoesNotExistException("Error, this task does not exist");
         }
 
-        int indexOfColumn = this.Columns.IndexOfValue(columnUUID);
+        IColumn newColumn = GetColumnByUUID(columnUUID);
 
-        if (this.Columns.ElementAt(indexOfColumn).Key.GetTask(taskUUID) != null)
+        if (newColumn.GetTask(taskUUID) != null)
         {
             return;
         }
@@ -70,11 +70,20 @@ public class Board : IBoard
             throw new InconsistentStateException("Runtime error");
         }
 
-        this.Columns.ElementAt(indexOfColumn).Key.AddTask(task);
+        newColumn.AddTask(task);
         tasksColumn.RemoveTask(task.UUID);
     }
 
-    public void MoveColumn(string columnUUID, int position) => throw new NotImplementedException();
+    public void MoveColumn(string columnUUID, int position)
+    {
+        if (!IsColumnAlreadyExist(columnUUID))
+        {
+            throw new ColumnDoesNotExistException("Error, this column does not exist");
+        }
+
+        position = position >= this.Columns.Count ? this.Columns.Count : (position < 0 ? 0 : position);
+        this.Columns.Insert(position, GetColumnByUUID(columnUUID));
+    }
 
     public int GetCountOfColumns()
     {
@@ -83,18 +92,26 @@ public class Board : IBoard
 
     public IColumn? GetColumn(string columnUUID)
     {
-        int indexOfColumn = this.Columns.IndexOfValue(columnUUID);
-        if (indexOfColumn == -1)
+        try
+        {
+            return GetColumnByUUID(columnUUID);
+        }
+        catch (InconsistentStateException exception)
         {
             return null;
         }
-
-        return this.Columns.ElementAt(indexOfColumn).Key;
     }
 
     public ReadOnlyCollection<string> GetAllColumnUUIDs()
     {
-        return new ReadOnlyCollection<string>(this.Columns.Values);
+        List<string> collectionOfUUIDs = new List<string>();
+
+        foreach (var column in Columns)
+        {
+            collectionOfUUIDs.Add(column.UUID);
+        }
+
+        return new ReadOnlyCollection<string>(collectionOfUUIDs);
     }
 
     public string Name { get; }
@@ -105,7 +122,7 @@ public class Board : IBoard
     {
         foreach (var columnInfo in this.Columns)
         {
-            if (columnInfo.Key.GetTask(taskUUID) != null)
+            if (columnInfo.GetTask(taskUUID) != null)
             {
                 return true;
             }
@@ -116,22 +133,43 @@ public class Board : IBoard
 
     private bool IsColumnAlreadyExist(string columnUUID)
     {
-        return this.Columns.IndexOfValue(columnUUID) != -1;
+        try
+        {
+            GetColumnByUUID(columnUUID);
+            return true;
+        }
+        catch (InconsistentStateException exception)
+        {
+            return false;
+        }
     }
 
     private IColumn GetColumnByTask(string taskUUID)
     {
         foreach (var columnInfo in this.Columns)
         {
-            if (columnInfo.Key.GetTask(taskUUID) != null)
+            if (columnInfo.GetTask(taskUUID) != null)
             {
-                return columnInfo.Key;
+                return columnInfo;
             }
         }
 
         throw new InconsistentStateException("Runtime error");
     }
 
-    private SortedList<IColumn, string> Columns;
+    private IColumn GetColumnByUUID(string columnUUID)
+    {
+        foreach (var columnInfo in this.Columns)
+        {
+            if (columnInfo.UUID != columnUUID)
+            {
+                return columnInfo;
+            }
+        }
+
+        throw new InconsistentStateException("Runtime error");
+    }
+
+    private List<IColumn> Columns;
     private const int COLUMN_LIMIT = 10;
 }
