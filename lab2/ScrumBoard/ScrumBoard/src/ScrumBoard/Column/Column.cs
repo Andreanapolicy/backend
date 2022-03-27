@@ -17,7 +17,7 @@ public class Column : IColumn
     {
         if (this.Tasks.IndexOfValue(task.UUID) != -1)
         {
-            throw new TaskAlreadyInColumnException("Error, this task is already in column");
+            throw new TaskIsAlreadyExistException("Error, this task is already in column");
         }
 
         this.Tasks.Add(task, task.UUID);
@@ -28,7 +28,7 @@ public class Column : IColumn
         int indexOfTask = this.Tasks.IndexOfValue(taskUUID);
         if (indexOfTask == -1)
         {
-            throw new TaskDoesNotExistInThisColumnException("Error, this task does not exist in this column");
+            throw new TaskDoesNotExistException("Error, this task does not exist in this column");
         }
 
         this.Tasks.RemoveAt(indexOfTask);
