@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using ScrumBoard.ScrumBoard.Task;
 
 namespace ScrumBoard.ScrumBoard.Column;
@@ -10,7 +11,7 @@ public interface IColumn
 
     public ITask? GetTask(string taskUUID);
 
-    public List<string> GetAllTaskUUIDs();
+    public ReadOnlyCollection<string> GetAllTaskUUIDs();
 
     public string Name { get; set; }
 
