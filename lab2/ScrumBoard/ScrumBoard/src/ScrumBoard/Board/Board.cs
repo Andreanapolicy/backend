@@ -92,7 +92,10 @@ public class Board : IBoard
         return this.Columns.ElementAt(indexOfColumn).Key;
     }
 
-    public ReadOnlyCollection<string> GetAllColumnUUIDs() => throw new NotImplementedException();
+    public ReadOnlyCollection<string> GetAllColumnUUIDs()
+    {
+        return new ReadOnlyCollection<string>(this.Columns.Values);
+    }
 
     public string Name { get; }
 
