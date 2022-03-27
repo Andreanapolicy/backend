@@ -6,7 +6,7 @@ public interface ITask
 
     public string Description { get; set; }
 
-    public int Proirity { get; set; }
+    public int Priority { get; set; }
 
     public string UUID { get; }
 }
