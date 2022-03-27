@@ -2,7 +2,7 @@ namespace ScrumBoard.ScrumBoard.Task;
 
 public class Task : ITask
 {
-    public Task(string name, string description, int priority)
+    public Task(string name, string description, TaskPriority priority)
     {
         this.Name = name;
         this.Description = description;
@@ -14,7 +14,7 @@ public class Task : ITask
 
     public string Description { get; set; }
 
-    public int Priority { get; set; }
+    public TaskPriority Priority { get; set; }
 
     public string UUID { get; }
 }

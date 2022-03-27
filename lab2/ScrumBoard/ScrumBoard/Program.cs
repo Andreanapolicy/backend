@@ -11,8 +11,8 @@ namespace ScrumBoard
             try
             {
                 IColumn firstColumn = new Column("In progress");
-                ITask task = new Task("asd", "asd", 1);
-                ITask task2 = new Task("asd", "asd", 4);
+                ITask task = new Task("asd", "asd", TaskPriority.LOW);
+                ITask task2 = new Task("asd", "asd", TaskPriority.EXTRA);
                 Console.WriteLine(task.Name + ' ' + task.Description + ' ' + task.Priority + ' ' + task.UUID);
 
                 firstColumn.AddTask(task);

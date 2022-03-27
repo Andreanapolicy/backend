@@ -9,9 +9,9 @@ public class TaskComparer : IComparer<ITask>
             return -1;
         }
 
-        int firstPriority = firstTask.Priority;
-        int secondPriority = secondTask.Priority;
+        TaskPriority firstPriority = firstTask.Priority;
+        TaskPriority secondPriority = secondTask.Priority;
 
-        return firstPriority == secondPriority ? 0 : (firstPriority < secondPriority ? -1 : 1);
+        return firstPriority == secondPriority ? 0 : (firstPriority > secondPriority ? -1 : 1);
     }
 }
