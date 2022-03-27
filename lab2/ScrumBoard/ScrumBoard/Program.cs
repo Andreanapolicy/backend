@@ -1,0 +1,6 @@
+﻿namespace ScrumBoard
+{
+    class Program
+    {
+    }
+}
