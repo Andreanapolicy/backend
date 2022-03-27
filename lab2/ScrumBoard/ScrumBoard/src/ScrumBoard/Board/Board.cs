@@ -20,6 +20,13 @@ public class Board : IBoard
         {
             throw new TaskIsAlreadyExistException("Error, this task is already exist");
         }
+
+        if (GetCountOfColumns() == 0)
+        {
+            throw new ColumnDoesNotExistException("Error, there are no columns");
+        }
+
+        this.Columns.Keys[0].AddTask(task);
     }
 
     public void AddColumn(IColumn column)
