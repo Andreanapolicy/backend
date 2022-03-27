@@ -1,6 +1,7 @@
 ﻿using ScrumBoard.ScrumBoard.Board;
 using ScrumBoard.ScrumBoard.Board.BoardFactory;
 using ScrumBoard.ScrumBoard.Column;
+using ScrumBoard.ScrumBoard.Column.ColumnFactory;
 using ScrumBoard.ScrumBoard.Task;
 using Task = ScrumBoard.ScrumBoard.Task.Task;
 
@@ -13,8 +14,9 @@ namespace ScrumBoard
             try
             {
                 IBoardFactory boardFactory = new BoardFactory();
+                IColumnFactory columnFactory = new ColumnFactory();
                 IBoard board = boardFactory.createBoard("Site Services(SS)");
-                IColumn firstColumn = new Column("In progress");
+                IColumn firstColumn = columnFactory.createColumn("In progress");
                 ITask task = new Task("asd", "asd", TaskPriority.LOW);
                 ITask task2 = new Task("asd", "asd", TaskPriority.EXTRA);
                 Console.WriteLine(task.Name + ' ' + task.Description + ' ' + task.Priority + ' ' + task.UUID);
