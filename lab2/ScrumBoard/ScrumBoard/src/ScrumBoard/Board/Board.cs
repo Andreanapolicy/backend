@@ -161,7 +161,7 @@ public class Board : IBoard
     {
         foreach (var columnInfo in this.Columns)
         {
-            if (columnInfo.UUID != columnUUID)
+            if (columnInfo.UUID == columnUUID)
             {
                 return columnInfo;
             }

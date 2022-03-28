@@ -120,3 +120,48 @@ public class ColumnTests
         Assert.AreEqual(column.GetAllTaskUUIDs().Count, 2);
     }
 }
+
+[TestFixture]
+public class BoardTests
+{
+    private ITaskFactory taskFactory;
+    private IColumnFactory columnFactory;
+    private IBoardFactory boardFactory;
+
+    public BoardTests()
+    {
+        this.taskFactory = new TaskFactory();
+        this.columnFactory = new ColumnFactory();
+        this.boardFactory = new BoardFactory();
+    }
+
+    [Test]
+    public void BoardCreatesWithRightParams()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        Assert.AreEqual(board.Name, "Site Services(SS)");
+        Assert.AreEqual(board.GetCountOfColumns(), 0);
+        Assert.AreEqual(board.GetAllColumnUUIDs().Count, 0);
+    }
+
+    [Test]
+    public void CannotAddTaskToBoardWithoutColumns()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
+
+        Assert.Throws<ColumnDoesNotExistException>(() => board.AddTask(firstTask));
+    }
+
+    [Test]
+    public void AddColumnToEmptyBoard()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn column = columnFactory.createColumn("In Progress");
+
+        Assert.DoesNotThrow(() => board.AddColumn(column));
+        Assert.AreSame(board.GetColumn(column.UUID), column);
+        Assert.AreEqual(board.GetAllColumnUUIDs()[0], column.UUID);
+        Assert.AreEqual(board.GetCountOfColumns(), 1);
+    }
+}
