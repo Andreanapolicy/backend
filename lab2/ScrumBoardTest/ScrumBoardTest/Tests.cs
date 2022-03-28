@@ -203,26 +203,26 @@ public class BoardTests
     public void MoveColumnsAtBoard()
     {
         IBoard board = boardFactory.createBoard("Site Services(SS)");
-        IColumn firstcolumn = columnFactory.createColumn("In Progress");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
         IColumn secondcolumn = columnFactory.createColumn("Code Review");
         IColumn thirdcolumn = columnFactory.createColumn("Fixed");
         IColumn fourthcolumn = columnFactory.createColumn("Verified");
 
-        Assert.DoesNotThrow(() => board.AddColumn(firstcolumn));
+        Assert.DoesNotThrow(() => board.AddColumn(firstColumn));
         Assert.DoesNotThrow(() => board.AddColumn(secondcolumn));
         Assert.DoesNotThrow(() => board.AddColumn(thirdcolumn));
         Assert.DoesNotThrow(() => board.AddColumn(fourthcolumn));
         Assert.AreEqual(board.GetCountOfColumns(), 4);
-        Assert.AreEqual(board.GetAllColumnUUIDs()[0], firstcolumn.UUID);
+        Assert.AreEqual(board.GetAllColumnUUIDs()[0], firstColumn.UUID);
 
-        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, 1000));
-        Assert.AreEqual(board.GetAllColumnUUIDs()[3], firstcolumn.UUID);
+        Assert.DoesNotThrow(() => board.MoveColumn(firstColumn.UUID, 1000));
+        Assert.AreEqual(board.GetAllColumnUUIDs()[3], firstColumn.UUID);
 
-        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, -1));
-        Assert.AreEqual(board.GetAllColumnUUIDs()[0], firstcolumn.UUID);
+        Assert.DoesNotThrow(() => board.MoveColumn(firstColumn.UUID, -1));
+        Assert.AreEqual(board.GetAllColumnUUIDs()[0], firstColumn.UUID);
 
-        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, 1));
-        Assert.AreEqual(board.GetAllColumnUUIDs()[1], firstcolumn.UUID);
+        Assert.DoesNotThrow(() => board.MoveColumn(firstColumn.UUID, 1));
+        Assert.AreEqual(board.GetAllColumnUUIDs()[1], firstColumn.UUID);
     }
 
     [Test]
@@ -238,11 +238,11 @@ public class BoardTests
     public void AddExistingTaskToBoard()
     {
         IBoard board = boardFactory.createBoard("Site Services(SS)");
-        IColumn firstcolumn = columnFactory.createColumn("In Progress");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
         ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
 
-        board.AddColumn(firstcolumn);
-        firstcolumn.AddTask(firstTask);
+        board.AddColumn(firstColumn);
+        firstColumn.AddTask(firstTask);
         Assert.Throws<TaskIsAlreadyExistException>(() => board.AddTask(firstTask));
     }
 
@@ -250,27 +250,43 @@ public class BoardTests
     public void AddTaskToBoard()
     {
         IBoard board = boardFactory.createBoard("Site Services(SS)");
-        IColumn firstcolumn = columnFactory.createColumn("In Progress");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
         ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
 
-        board.AddColumn(firstcolumn);
+        board.AddColumn(firstColumn);
         Assert.DoesNotThrow(() => board.AddTask(firstTask));
-        Assert.AreSame(firstcolumn.GetTask(firstTask.UUID), firstTask);
+        Assert.AreSame(firstColumn.GetTask(firstTask.UUID), firstTask);
     }
 
     [Test]
     public void AddTaskToBoardFromSecondColumn()
     {
         IBoard board = boardFactory.createBoard("Site Services(SS)");
-        IColumn firstcolumn = columnFactory.createColumn("In Progress");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
         IColumn secondcolumn = columnFactory.createColumn("Code Review");
         ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
 
         Assert.DoesNotThrow(() => board.AddColumn(secondcolumn));
         Assert.DoesNotThrow(() => board.AddTask(firstTask));
         Assert.AreSame(secondcolumn.GetTask(firstTask.UUID), firstTask);
-        Assert.DoesNotThrow(() => board.AddColumn(firstcolumn));
-        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, 0));
+        Assert.DoesNotThrow(() => board.AddColumn(firstColumn));
+        Assert.DoesNotThrow(() => board.MoveColumn(firstColumn.UUID, 0));
         Assert.Throws<TaskIsAlreadyExistException>(() => board.AddTask(firstTask));
+    }
+
+    [Test]
+    public void MoveTaskToFirstFromSecondColumn()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
+        IColumn secondcolumn = columnFactory.createColumn("Code Review");
+        ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
+
+        Assert.DoesNotThrow(() => board.AddColumn(secondcolumn));
+        Assert.DoesNotThrow(() => board.AddTask(firstTask));
+        Assert.AreSame(secondcolumn.GetTask(firstTask.UUID), firstTask);
+        Assert.DoesNotThrow(() => board.AddColumn(firstColumn));
+        Assert.DoesNotThrow(() => board.MoveTask(firstTask.UUID, firstColumn.UUID));
+        Assert.AreSame(firstColumn.GetTask(firstTask.UUID), firstTask);
     }
 }
