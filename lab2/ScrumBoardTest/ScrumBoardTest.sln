@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrumBoardTest", "ScrumBoardTest\ScrumBoardTest.csproj", "{B93C7B39-D41A-4113-A6EC-025804C6ADF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrumBoard", "..\ScrumBoard\ScrumBoard\ScrumBoard.csproj", "{1F16DF58-E7D7-4D5A-B343-29D906399CF9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B93C7B39-D41A-4113-A6EC-025804C6ADF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93C7B39-D41A-4113-A6EC-025804C6ADF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93C7B39-D41A-4113-A6EC-025804C6ADF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93C7B39-D41A-4113-A6EC-025804C6ADF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F16DF58-E7D7-4D5A-B343-29D906399CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F16DF58-E7D7-4D5A-B343-29D906399CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F16DF58-E7D7-4D5A-B343-29D906399CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F16DF58-E7D7-4D5A-B343-29D906399CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
