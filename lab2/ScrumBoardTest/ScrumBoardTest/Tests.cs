@@ -289,4 +289,41 @@ public class BoardTests
         Assert.DoesNotThrow(() => board.MoveTask(firstTask.UUID, firstColumn.UUID));
         Assert.AreSame(firstColumn.GetTask(firstTask.UUID), firstTask);
     }
+
+    [Test]
+    public void MoveTaskToFirstFromFirstColumn()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
+        ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
+
+        Assert.DoesNotThrow(() => board.AddColumn(firstColumn));
+        Assert.DoesNotThrow(() => board.AddTask(firstTask));
+        Assert.DoesNotThrow(() => board.MoveTask(firstTask.UUID, firstColumn.UUID));
+        Assert.AreSame(firstColumn.GetTask(firstTask.UUID), firstTask);
+    }
+
+    [Test]
+    public void MoveNotExistingTaskToFirstColumn()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
+        ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
+
+        Assert.DoesNotThrow(() => board.AddColumn(firstColumn));
+        Assert.DoesNotThrow(() => board.AddTask(firstTask));
+        Assert.Throws<TaskDoesNotExistException>(() => board.MoveTask("123-123213-1232-123", firstColumn.UUID));
+    }
+
+    [Test]
+    public void MoveExistingTaskToNotExistingColumn()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn firstColumn = columnFactory.createColumn("In Progress");
+        ITask firstTask = taskFactory.createTask("Add plus to calculator", "Add plus to calculator to increase money input", TaskPriority.NORMAL);
+
+        Assert.DoesNotThrow(() => board.AddColumn(firstColumn));
+        Assert.DoesNotThrow(() => board.AddTask(firstTask));
+        Assert.Throws<ColumnDoesNotExistException>(() => board.MoveTask(firstTask.UUID, "123-1223-123123123-1232121"));
+    }
 }
