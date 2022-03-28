@@ -164,4 +164,73 @@ public class BoardTests
         Assert.AreEqual(board.GetAllColumnUUIDs()[0], column.UUID);
         Assert.AreEqual(board.GetCountOfColumns(), 1);
     }
+
+    [Test]
+    public void AddAlreadyExistingColumnToBoard()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn column = columnFactory.createColumn("In Progress");
+
+        Assert.DoesNotThrow(() => board.AddColumn(column));
+        Assert.AreSame(board.GetColumn(column.UUID), column);
+        Assert.AreEqual(board.GetAllColumnUUIDs()[0], column.UUID);
+        Assert.AreEqual(board.GetCountOfColumns(), 1);
+        Assert.Throws<ColumnIsAlreadyExistException>(() => board.AddColumn(column));
+    }
+
+    [Test]
+    public void AddMaxColumnsToBoard()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn column1 = columnFactory.createColumn("1");
+        IColumn column2 = columnFactory.createColumn("2");
+        IColumn column3 = columnFactory.createColumn("3");
+        IColumn column4 = columnFactory.createColumn("4");
+        IColumn column5 = columnFactory.createColumn("5");
+        IColumn column6 = columnFactory.createColumn("6");
+        IColumn column7 = columnFactory.createColumn("7");
+        IColumn column8 = columnFactory.createColumn("8");
+        IColumn column9 = columnFactory.createColumn("9");
+        IColumn column10 = columnFactory.createColumn("10");
+        IColumn column11 = columnFactory.createColumn("11");
+
+        Assert.DoesNotThrow(() => board.AddColumn(column1));
+        Assert.DoesNotThrow(() => board.AddColumn(column2));
+        Assert.DoesNotThrow(() => board.AddColumn(column3));
+        Assert.DoesNotThrow(() => board.AddColumn(column4));
+        Assert.DoesNotThrow(() => board.AddColumn(column5));
+        Assert.DoesNotThrow(() => board.AddColumn(column6));
+        Assert.DoesNotThrow(() => board.AddColumn(column7));
+        Assert.DoesNotThrow(() => board.AddColumn(column8));
+        Assert.DoesNotThrow(() => board.AddColumn(column9));
+        Assert.DoesNotThrow(() => board.AddColumn(column10));
+        Assert.AreEqual(board.GetCountOfColumns(), 10);
+        Assert.Throws<ColumnCountLimitException>(() => board.AddColumn(column11));
+    }
+
+    [Test]
+    public void MoveColumnsAtBoard()
+    {
+        IBoard board = boardFactory.createBoard("Site Services(SS)");
+        IColumn firstcolumn = columnFactory.createColumn("In Progress");
+        IColumn secondcolumn = columnFactory.createColumn("Code Review");
+        IColumn thirdcolumn = columnFactory.createColumn("Fixed");
+        IColumn fourthcolumn = columnFactory.createColumn("Verified");
+
+        Assert.DoesNotThrow(() => board.AddColumn(firstcolumn));
+        Assert.DoesNotThrow(() => board.AddColumn(secondcolumn));
+        Assert.DoesNotThrow(() => board.AddColumn(thirdcolumn));
+        Assert.DoesNotThrow(() => board.AddColumn(fourthcolumn));
+        Assert.AreEqual(board.GetCountOfColumns(), 4);
+        Assert.AreEqual(board.GetAllColumnUUIDs()[0], firstcolumn.UUID);
+
+        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, 1000));
+        Assert.AreEqual(board.GetAllColumnUUIDs()[3], firstcolumn.UUID);
+
+        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, -1));
+        Assert.AreEqual(board.GetAllColumnUUIDs()[0], firstcolumn.UUID);
+
+        Assert.DoesNotThrow(() => board.MoveColumn(firstcolumn.UUID, 1));
+        Assert.AreEqual(board.GetAllColumnUUIDs()[1], firstcolumn.UUID);
+    }
 }

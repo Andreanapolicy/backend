@@ -81,7 +81,8 @@ public class Board : IBoard
             throw new ColumnDoesNotExistException("Error, this column does not exist");
         }
 
-        position = position >= this.Columns.Count ? this.Columns.Count : (position < 0 ? 0 : position);
+        position = Math.Max(0, position);
+        position = Math.Min(this.Columns.Count - 1, position);
         this.Columns.Insert(position, GetColumnByUUID(columnUUID));
     }
 
